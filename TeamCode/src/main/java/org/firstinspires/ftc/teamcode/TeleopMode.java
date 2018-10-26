@@ -115,7 +115,7 @@ public class TeleopMode extends OpMode
         // - This requires no math, but it is hard to drive forward slowly and keep straight.
         leftPower  = -gamepad1.left_stick_y ;
         rightPower = -gamepad1.right_stick_y ;
-
+        
         if (gamepad2.dpad_down)
         {
             robot.rack.setPower(0.5);
