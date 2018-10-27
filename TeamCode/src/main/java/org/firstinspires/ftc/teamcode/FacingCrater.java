@@ -62,8 +62,9 @@ public class FacingCrater extends LinearOpMode {
         if (drivingToCrater)
         {
             //TODO: Uncomment this line if robot front facing lander
-            automode.rotateDegrees(180, robot);
+            //automode.rotateDegrees(180, robot);
             automode.moveInches(108, 108, 0.8, 15, robot, false);
+            drivingToCrater = false;
         }
     }
 }
