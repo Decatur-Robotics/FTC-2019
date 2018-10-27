@@ -118,7 +118,7 @@ public class TeleopMode extends OpMode
          rightPower = -gamepad1.right_stick_y ;
 
         // Send calculated power to wheels
-        robot.backDrive.setPower((leftPower+rightPower)/2);
+     //   robot.backDrive.setPower((leftPower+rightPower)/2);
         robot.leftDrive.setPower(leftPower);
         robot.rightDrive.setPower(rightPower);
 
