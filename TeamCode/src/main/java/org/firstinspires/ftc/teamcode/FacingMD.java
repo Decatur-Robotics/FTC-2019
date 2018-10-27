@@ -67,6 +67,7 @@ public class FacingMD extends LinearOpMode {
             //TODO: Change the number to 70.5 if front of robot facing lander
             automode.rotateDegrees(109, robot);
             automode.moveInches(108, 108, 0.8, 15, robot, false);
+            drivingToCrater = false;
         }
     }
 }
