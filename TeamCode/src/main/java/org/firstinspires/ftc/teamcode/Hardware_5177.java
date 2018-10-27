@@ -28,8 +28,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
     public class Hardware_5177
     {
         /* Public OpMode members. */
-        public DcMotor  leftMotor   = null;
-        public DcMotor  rightMotor  = null;
+        public DcMotor  backDrive   = null;
+        public DcMotor  rightDrive  = null;
+        public DcMotor  leftDrive = null;
 
 
         /* local OpMode members. */
@@ -47,18 +48,23 @@ import com.qualcomm.robotcore.util.ElapsedTime;
             hwMap = ahwMap;
 
             // Define and Initialize Motors
-            leftMotor   = hwMap.dcMotor.get("left_drive");
-            rightMotor  = hwMap.dcMotor.get("right_drive");
+            backDrive = hwMap.dcMotor.get("back_drive");
+            leftDrive   = hwMap.dcMotor.get("left_drive");
+            rightDrive  = hwMap.dcMotor.get("right_drive");
 
-            leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-            rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+
+            backDrive.setDirection(DcMotor.Direction.FORWARD);
+            leftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+            rightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
             // Set all motors to zero power
-            leftMotor.setPower(0);
-            rightMotor.setPower(0);
+            backDrive.setPower(0);
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
             // Set all motors to run without encoders.
             // May want to use RUN_USING_ENCODERS if encoders are installed.
-            leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             // Define and initialize ALL installed servos.
         }
