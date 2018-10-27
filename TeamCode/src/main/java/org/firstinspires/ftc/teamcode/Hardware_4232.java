@@ -33,7 +33,7 @@ public class Hardware_4232
     public DcMotor  leftMotor   = null;
     public DcMotor  rightMotor  = null;
     public DcMotor  rack = null;
-    public ModernRoboticsI2cGyro gyro = null;
+  //  public ModernRoboticsI2cGyro gyro = null;
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
@@ -53,9 +53,9 @@ public class Hardware_4232
         // Define and Initialize Motors
         leftMotor   = hwMap.dcMotor.get("left_drive");
         rightMotor  = hwMap.dcMotor.get("right_drive");
-        rack        = hwMap.dcMotor.get("charlie");
+        rack        = hwMap.dcMotor.get("rack");
         //TODO: Make sure the gyro has correct name
-        gyro        = hwMap.get(ModernRoboticsI2cGyro.class, "melissa");
+      //  gyro        = hwMap.get(ModernRoboticsI2cGyro.class, "melissa");
 
         leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
