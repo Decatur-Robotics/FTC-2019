@@ -62,6 +62,7 @@ public class FacingCrater extends OpMode {
             //Cut power
             robot.rack.setPower(0);
             //TODO: Change the numbers from positive to negative if the front is facing the lander
+            //robot could be facing to the side depending on where we put the rack - Scott
             automode.moveInches(24, 24, .7, 5, robot, false);
             dropping = false;
             drivingToCrater = true;

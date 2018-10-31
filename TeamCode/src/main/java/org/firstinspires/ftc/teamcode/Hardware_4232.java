@@ -56,7 +56,7 @@ public class Hardware_4232
         rack        = hwMap.dcMotor.get("rack");
         //TODO: Make sure the gyro has correct name
       //  gyro        = hwMap.get(ModernRoboticsI2cGyro.class, "melissa");
-
+        // call it something reasonable
         leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         // Set all motors to zero power
