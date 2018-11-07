@@ -53,7 +53,7 @@ import org.firstinspires.ftc.teamcode.Hardware_4232;
  */
 
 @TeleOp(name="Main Teleop", group="Iterative Opmode")
-@Disabled
+
 public class TeleopMode extends OpMode
 {
     // Declare OpMode members.
@@ -65,7 +65,7 @@ public class TeleopMode extends OpMode
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
-
+        robot.init(hardwareMap);
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -123,6 +123,10 @@ public class TeleopMode extends OpMode
         if (gamepad2.dpad_up)
         {
             robot.rack.setPower(-0.5);
+        }
+        else
+        {
+            robot.rack.setPower(0);
         }
 
         // Send calculated power to wheels

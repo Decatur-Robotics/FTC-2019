@@ -64,15 +64,28 @@ public class FacingMD extends OpMode {
             //Cut power
             robot.rack.setPower(0);
             //TODO: Change the numbers from positive to negative if the front is facing the lander
-            automode.moveInches(24, 24, .7, 5, robot, false);
+            automode.moveInches(-6, -6, .7, 5, robot, false);
             dropping = false;
             drivingToCrater = true;
+            motorTarget = robot.rack.getCurrentPosition() + 2830;
+            robot.rack.setTargetPosition(motorTarget);
+            robot.rack.setPower(0.5);
+            while (robot.rack.isBusy())
+            {
+                telemetry.addData("Path0","Rack dropping\n");
+                telemetry.update();
+            }
+            //Cut power
+            robot.rack.setPower(0);
         }
         if (drivingToCrater)
         {
-            //TODO: Change the number to 70.5 if front of robot facing lander
-            automode.rotateDegrees(109, robot);
-            automode.moveInches(108, 108, 0.8, 15, robot, false);
+            automode.rotateDegrees(180, robot);
+            automode.moveInches(78, 78, .7, 15, robot, false);
+            //TODO: Add Mascot dropping code here
+
+            automode.rotateDegrees(135, robot);
+            automode.moveInches(132, 132, .8, 15, robot, false);
             drivingToCrater = false;
         }
     }

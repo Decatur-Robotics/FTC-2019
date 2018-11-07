@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 //TODO: Test this entire opmode, it likely won't work great.
 
-@Autonomous(name="FacingCrate", group="Autonomous")
+@Autonomous(name="FacingCrater", group="Autonomous")
 
 public class FacingCrater extends OpMode {
     Hardware_4232 robot = new Hardware_4232();
@@ -63,15 +63,30 @@ public class FacingCrater extends OpMode {
             robot.rack.setPower(0);
             //TODO: Change the numbers from positive to negative if the front is facing the lander
             //robot could be facing to the side depending on where we put the rack - Scott
-            automode.moveInches(24, 24, .7, 5, robot, false);
+            //Well it isn't so ha - Keon
+            automode.moveInches(-6, -6, .7, 5, robot, false);
             dropping = false;
             drivingToCrater = true;
+            motorTarget = robot.rack.getCurrentPosition() + 2830;
+            robot.rack.setTargetPosition(motorTarget);
+            robot.rack.setPower(0.5);
+            while (robot.rack.isBusy())
+            {
+                telemetry.addData("Path0","Rack dropping\n");
+                telemetry.update();
+            }
+            //Cut power
+            robot.rack.setPower(0);
         }
         if (drivingToCrater)
         {
             //TODO: Uncomment this line if robot front facing lander
-            //automode.rotateDegrees(180, robot);
-            automode.moveInches(108, 108, 0.8, 15, robot, false);
+            automode.rotateDegrees(118.58, robot);
+            automode.moveInches(8.846 * 12, 8.846 * 12, 0.8, 15, robot, false);
+            //TODO: Drop mascot here
+
+            automode.rotateDegrees(151.42, robot);
+            automode.moveInches(132, 132, 0.8, 15, robot, false);
             drivingToCrater = false;
         }
     }
