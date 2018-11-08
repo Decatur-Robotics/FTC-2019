@@ -28,13 +28,16 @@ import com.qualcomm.robotcore.util.ElapsedTime;
     public class Hardware_5177
     {
         /* Public OpMode members. */
-        public DcMotor  leftMotor   = null;
-        public DcMotor  rightMotor  = null;
+        public DcMotor leftMotor = null;
+        public DcMotor rightMotor = null;
+        public DcMotor arm = null;
+        public Servo rightClaw = null;
+        public Servo leftClaw = null;
 
 
         /* local OpMode members. */
-        HardwareMap hwMap           =  null;
-        private ElapsedTime period  = new ElapsedTime();
+        HardwareMap hwMap = null;
+        private ElapsedTime period = new ElapsedTime();
 
         /* Constructor */
         public Hardware_5177(){
@@ -47,8 +50,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
             hwMap = ahwMap;
 
             // Define and Initialize Motors
-            leftMotor   = hwMap.dcMotor.get("left_drive");
-            rightMotor  = hwMap.dcMotor.get("right_drive");
+            leftMotor = hwMap.dcMotor.get("left_drive");
+            rightMotor = hwMap.dcMotor.get("right_drive");
+            arm = hwMap.dcMotor.get("left_arm");
+            rightClaw = hwMap.servo.get("right_hand");
+            leftClaw = hwMap.servo.get("left_hand");
 
             leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
             rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
