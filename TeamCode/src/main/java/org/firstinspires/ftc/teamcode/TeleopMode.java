@@ -54,7 +54,7 @@ import org.firstinspires.ftc.teamcode.Hardware_5177;
  */
 
 @TeleOp(name="Main Teleop", group="Iterative Opmode")
-@Disabled
+
 public class TeleopMode extends OpMode
 {
     // Declare OpMode members.
@@ -102,7 +102,13 @@ public class TeleopMode extends OpMode
         // Setup a variable for each drive wheel to save power level for telemetry
         double leftPower;
         double rightPower;
-
+        boolean armBackwards = false;
+        if (gamepad2.x){
+            armBackwards = true;
+        }
+        if (gamepad2.y){
+            armBackwards = false;
+        }
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
 
@@ -132,7 +138,7 @@ public class TeleopMode extends OpMode
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-        if (gamepad2.right_trigger > 0)
+        if (gamepad2.left_trigger > 0)
         {
             robot.arm.setPower(0.5);
         }
@@ -142,7 +148,12 @@ public class TeleopMode extends OpMode
         }
         else
         {
-            robot.arm.setPower(0);
+            if (armBackwards){
+                robot.arm.setPower(.1);
+            }
+            else {
+                robot.arm.setPower(.1);
+            }
         }
 
 
@@ -151,7 +162,7 @@ public class TeleopMode extends OpMode
             robot.leftClaw.setPosition(0);
         }
         else {
-            robot.rightClaw.setPosition(170);
+            robot.rightClaw.setPosition(10);
             robot.leftClaw.setPosition(170);
         }
         
