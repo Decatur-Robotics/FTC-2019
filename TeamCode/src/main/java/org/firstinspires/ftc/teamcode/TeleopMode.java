@@ -125,11 +125,11 @@ public class TeleopMode extends OpMode
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-        if (false /*rightTriggerDown*/)
+        if (gamepad1.right_trigger > 0)
         {
             robot.arm.setPower(0.5);
         }
-        if (false /*leftTriggerDown*/)
+        if (gamepad1.right_trigger > 0)
         {
             robot.arm.setPower(-0.5);
         }
@@ -139,7 +139,7 @@ public class TeleopMode extends OpMode
         }
 
 
-        if (false /*rightTriggerButtonIsDown*/){
+        if (gamepad1.right_bumper){
             robot.rightClaw.setPosition(0);
             robot.leftClaw.setPosition(0);
         }
@@ -147,6 +147,7 @@ public class TeleopMode extends OpMode
             robot.rightClaw.setPosition(170);
             robot.leftClaw.setPosition(170);
         }
+        
     }
 
     /*
