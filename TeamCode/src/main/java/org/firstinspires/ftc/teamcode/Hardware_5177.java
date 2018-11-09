@@ -28,17 +28,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
     public class Hardware_5177
     {
         /* Public OpMode members. */
-<<<<<<< HEAD
+
         public DcMotor leftMotor = null;
         public DcMotor rightMotor = null;
         public DcMotor arm = null;
         public Servo rightClaw = null;
         public Servo leftClaw = null;
-=======
+
         public DcMotor  backDrive   = null;
         public DcMotor  rightDrive  = null;
         public DcMotor  leftDrive = null;
->>>>>>> 3c8a207bac89b7bbc3b05292b9db9598b005f523
+
 
 
         /* local OpMode members. */
@@ -56,18 +56,16 @@ import com.qualcomm.robotcore.util.ElapsedTime;
             hwMap = ahwMap;
 
             // Define and Initialize Motors
-<<<<<<< HEAD
+
             leftMotor = hwMap.dcMotor.get("left_drive");
             rightMotor = hwMap.dcMotor.get("right_drive");
             arm = hwMap.dcMotor.get("left_arm");
             rightClaw = hwMap.servo.get("right_hand");
             leftClaw = hwMap.servo.get("left_hand");
-=======
+
             backDrive = hwMap.dcMotor.get("back_drive");
             leftDrive   = hwMap.dcMotor.get("left_drive");
             rightDrive  = hwMap.dcMotor.get("right_drive");
->>>>>>> 3c8a207bac89b7bbc3b05292b9db9598b005f523
-
 
             backDrive.setDirection(DcMotor.Direction.FORWARD);
             leftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
