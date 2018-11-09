@@ -29,8 +29,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
     {
         /* Public OpMode members. */
 
-        public DcMotor leftMotor = null;
-        public DcMotor rightMotor = null;
         public DcMotor arm = null;
         public Servo rightClaw = null;
         public Servo leftClaw = null;
@@ -57,8 +55,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
             // Define and Initialize Motors
 
-            leftMotor = hwMap.dcMotor.get("left_drive");
-            rightMotor = hwMap.dcMotor.get("right_drive");
             arm = hwMap.dcMotor.get("left_arm");
             rightClaw = hwMap.servo.get("right_hand");
             leftClaw = hwMap.servo.get("left_hand");

@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -66,7 +67,7 @@ public class TeleopMode extends OpMode
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
-
+        robot.init(hardwareMap);
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -118,9 +119,15 @@ public class TeleopMode extends OpMode
          rightPower = -gamepad1.right_stick_y ;
 
         // Send calculated power to wheels
-        robot.backDrive.setPower((leftPower+rightPower)/2);
-        robot.leftDrive.setPower(leftPower);
-        robot.rightDrive.setPower(rightPower);
+        if (Math.abs(leftPower) > Math.abs(rightPower)){
+            robot.backDrive.setPower(-leftPower);
+        }
+        else {
+            robot.backDrive.setPower(-rightPower);
+        }
+
+        robot.leftDrive.setPower(-leftPower);
+        robot.rightDrive.setPower(-rightPower);
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
