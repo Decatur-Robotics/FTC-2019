@@ -53,7 +53,7 @@ public class FacingCrater extends OpMode {
             robot.rack.setTargetPosition(motorTarget);
             //Run to position
             robot.rack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.rack.setPower(0.5);
+            robot.rack.setPower(-1);
             while (robot.rack.isBusy())
             {
                 telemetry.addData("Path0","Robot dropping\n");
@@ -64,12 +64,13 @@ public class FacingCrater extends OpMode {
             //TODO: Change the numbers from positive to negative if the front is facing the lander
             //robot could be facing to the side depending on where we put the rack - Scott
             //Well it isn't so ha - Keon
-            automode.moveInches(-6, -6, .7, 5, robot, false);
+            automode.moveInches(-4, -4, .7, 5, robot, false);
+            automode.rotateDegrees(5, robot);
             dropping = false;
             drivingToCrater = true;
             motorTarget = robot.rack.getCurrentPosition() + 2830;
             robot.rack.setTargetPosition(motorTarget);
-            robot.rack.setPower(0.5);
+            robot.rack.setPower(1);
             while (robot.rack.isBusy())
             {
                 telemetry.addData("Path0","Rack dropping\n");
@@ -81,11 +82,10 @@ public class FacingCrater extends OpMode {
         if (drivingToCrater)
         {
             //TODO: Uncomment this line if robot front facing lander
-            automode.rotateDegrees(118.58, robot);
-            automode.moveInches(8.846 * 12, 8.846 * 12, 0.8, 15, robot, false);
+            automode.moveInches(96, 96, 0.8, 15, robot, false);
             //TODO: Drop mascot here
-
-            automode.rotateDegrees(151.42, robot);
+            robot.mascot_dropper.setPosition(180);
+            automode.rotateDegrees(-50, robot);
             automode.moveInches(132, 132, 0.8, 15, robot, false);
             drivingToCrater = false;
         }

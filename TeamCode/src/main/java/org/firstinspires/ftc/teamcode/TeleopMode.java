@@ -118,16 +118,17 @@ public class TeleopMode extends OpMode
 
         if (gamepad2.dpad_down)
         {
-            robot.rack.setPower(0.5);
+            robot.rack.setPower(-1);
         }
         if (gamepad2.dpad_up)
         {
-            robot.rack.setPower(-0.5);
+            robot.rack.setPower(1);
         }
         else
         {
             robot.rack.setPower(0);
         }
+        telemetry.addData("RobotPower", "power is" + robot.rack.getPower());
 
         // Send calculated power to wheels
         robot.leftMotor.setPower(leftPower);

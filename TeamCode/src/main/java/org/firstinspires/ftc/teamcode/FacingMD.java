@@ -51,11 +51,11 @@ public class FacingMD extends OpMode {
         {
             //TODO: Change the hardcoded number until you land and the hook is free, Also change the + sign to a - if it doesn't work or breaks.
             //Set motor target
-            int motorTarget = robot.rack.getCurrentPosition() + 2830;
+            int motorTarget = robot.rack.getCurrentPosition() + 3250;
             robot.rack.setTargetPosition(motorTarget);
             //Run to position
             robot.rack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.rack.setPower(0.5);
+            robot.rack.setPower(-1);
             while (robot.rack.isBusy())
             {
                 telemetry.addData("Path0","Robot dropping\n");
@@ -63,13 +63,13 @@ public class FacingMD extends OpMode {
             }
             //Cut power
             robot.rack.setPower(0);
-            //TODO: Change the numbers from positive to negative if the front is facing the lander
-            automode.moveInches(-6, -6, .7, 5, robot, false);
+            automode.moveInches(-4, -4, .7, 5, robot, false);
+            automode.rotateDegrees(90, robot);
             dropping = false;
             drivingToCrater = true;
-            motorTarget = robot.rack.getCurrentPosition() + 2830;
+            motorTarget = robot.rack.getCurrentPosition() + 3500;
             robot.rack.setTargetPosition(motorTarget);
-            robot.rack.setPower(0.5);
+            robot.rack.setPower(1);
             while (robot.rack.isBusy())
             {
                 telemetry.addData("Path0","Rack dropping\n");
@@ -80,11 +80,10 @@ public class FacingMD extends OpMode {
         }
         if (drivingToCrater)
         {
-            automode.rotateDegrees(180, robot);
-            automode.moveInches(78, 78, .7, 15, robot, false);
+            automode.moveInches(-82, -82, .7, 15, robot, false);
             //TODO: Add Mascot dropping code here
-
-            automode.rotateDegrees(135, robot);
+            robot.mascot_dropper.setPosition(180);
+            automode.rotateDegrees(-50, robot);
             automode.moveInches(132, 132, .8, 15, robot, false);
             drivingToCrater = false;
         }
