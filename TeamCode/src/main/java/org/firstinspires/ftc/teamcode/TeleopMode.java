@@ -119,6 +119,8 @@ public class TeleopMode extends OpMode
         }
         telemetry.addData("armbackwards", armBackwards);
         telemetry.update();
+        telemetry.addData("armpower", power);
+        telemetry.update();
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
 

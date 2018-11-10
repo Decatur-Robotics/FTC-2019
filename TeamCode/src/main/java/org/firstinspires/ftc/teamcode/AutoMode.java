@@ -56,10 +56,10 @@ public class AutoMode extends OpMode {
     }
     @Override
     public void loop(){
-        foward(1);
-        delay(1.5);
-        foward(0);
-
+        foward(-1);
+        if (robot.rightDrive.getCurrentPosition()/120 < -24){
+            foward(0);
+        }
     }
 }
  
