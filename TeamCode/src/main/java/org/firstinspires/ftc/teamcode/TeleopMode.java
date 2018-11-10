@@ -102,6 +102,7 @@ public class TeleopMode extends OpMode
         // Setup a variable for each drive wheel to save power level for telemetry
         double leftPower;
         double rightPower;
+        double power = .5;
         boolean armBackwards = false;
         if (gamepad2.x){
             armBackwards = true;
@@ -109,6 +110,15 @@ public class TeleopMode extends OpMode
         if (gamepad2.y){
             armBackwards = false;
         }
+
+        if (gamepad2.b){
+            power = .5;
+        }
+        if (gamepad2.a){
+            power = 1;
+        }
+        telemetry.addData("armbackwards", armBackwards);
+        telemetry.update();
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
 
@@ -140,11 +150,11 @@ public class TeleopMode extends OpMode
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
         if (gamepad2.left_trigger > 0)
         {
-            robot.arm.setPower(0.5);
+            robot.arm.setPower(power);
         }
         if (gamepad2.right_trigger > 0)
         {
-            robot.arm.setPower(-0.5);
+            robot.arm.setPower(-power);
         }
         else
         {
@@ -158,12 +168,12 @@ public class TeleopMode extends OpMode
 
 
         if (gamepad2.right_bumper){
-            robot.rightClaw.setPosition(0);
-            robot.leftClaw.setPosition(0);
+            robot.rightClaw.setPosition(170);
+            robot.leftClaw.setPosition(00);
         }
         else {
-            robot.rightClaw.setPosition(10);
-            robot.leftClaw.setPosition(170);
+            robot.rightClaw.setPosition(0);
+            robot.leftClaw.setPosition(150);
         }
         
     }
