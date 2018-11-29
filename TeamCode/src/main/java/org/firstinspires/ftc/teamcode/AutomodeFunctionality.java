@@ -119,8 +119,9 @@ public class AutomodeFunctionality extends Activity{
 
     public String pictureAndCheck()
     {
+        Camera cam = Camera.open();
         try {
-            Camera cam = Camera.open();
+
             Parameters p = cam.getParameters();
             p.setFlashMode(Parameters.FLASH_MODE_TORCH);
             cam.setParameters(p);
@@ -135,6 +136,12 @@ public class AutomodeFunctionality extends Activity{
         int goldCenter = 0;
         int heightOfImage = imageBitmap.getHeight();
         int widthOfImage = imageBitmap.getWidth();
+        int maxGoldRed = 255;
+        int minGoldRed = 200;
+        int maxGoldGreen = 255;
+        int minGoldGreen = 200;
+        int maxGoldBlue = 142;
+        int minGoldBlue = 88;
         for (int i = 0; i < widthOfImage / 3; i++)
         {
             for (int j = 0; j < heightOfImage; j++)
@@ -186,6 +193,15 @@ public class AutomodeFunctionality extends Activity{
                 }
             }
         }
+        try
+        {
+            cam.stopPreview();
+            cam.release();
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
         if (goldRight > goldLeft)
         {
             if (goldRight > goldCenter)
@@ -208,7 +224,5 @@ public class AutomodeFunctionality extends Activity{
                 return "center";
             }
         }
-        cam.stopPreview();
-        cam.release();
     }
 }
