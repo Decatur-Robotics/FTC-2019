@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -53,7 +54,7 @@ import org.firstinspires.ftc.teamcode.Hardware_5177;
  */
 
 @TeleOp(name="Main Teleop", group="Iterative Opmode")
-@Disabled
+
 public class TeleopMode extends OpMode
 {
     // Declare OpMode members.
@@ -66,7 +67,7 @@ public class TeleopMode extends OpMode
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
-
+        robot.init(hardwareMap);
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -101,7 +102,25 @@ public class TeleopMode extends OpMode
         // Setup a variable for each drive wheel to save power level for telemetry
         double leftPower;
         double rightPower;
+        double power = .5;
+        boolean armBackwards = false;
+        if (gamepad2.x){
+            armBackwards = true;
+        }
+        if (gamepad2.y){
+            armBackwards = false;
+        }
 
+        if (gamepad2.b){
+            power = .5;
+        }
+        if (gamepad2.a){
+            power = 1;
+        }
+        telemetry.addData("armbackwards", armBackwards);
+        telemetry.update();
+        telemetry.addData("armpower", power);
+        telemetry.update();
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
 
@@ -118,13 +137,53 @@ public class TeleopMode extends OpMode
          rightPower = -gamepad1.right_stick_y ;
 
         // Send calculated power to wheels
-     //   robot.backDrive.setPower((leftPower+rightPower)/2);
-        robot.leftDrive.setPower(leftPower);
-        robot.rightDrive.setPower(rightPower);
+        if (Math.abs(leftPower) > Math.abs(rightPower)){
+            robot.backDrive.setPower(-leftPower);
+        }
+        else {
+            robot.backDrive.setPower(-rightPower);
+        }
+
+        robot.leftDrive.setPower(-leftPower);
+        robot.rightDrive.setPower(-rightPower);
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+        if (gamepad2.left_trigger > 0)
+        {
+            robot.arm.setPower(power);
+        }
+        if (gamepad2.right_trigger > 0)
+        {
+            robot.arm.setPower(-power);
+        }
+        else
+        {
+            if (armBackwards){
+                robot.arm.setPower(.1);
+            }
+            else {
+                robot.arm.setPower(.1);
+            }
+        }
+
+
+        if (gamepad2.right_bumper){
+            robot.rightClaw.setPosition(170);
+            robot.leftClaw.setPosition(00);
+        }
+        else {
+            robot.rightClaw.setPosition(0);
+            robot.leftClaw.setPosition(150);
+        }
+
+        if (gamepad2.dpad_up){
+            robot.liftMotor.setPower(-1);
+        } else if (gamepad2.dpad_down){
+            robot.liftMotor.setPower(1);
+        }
+        
     }
 
     /*
