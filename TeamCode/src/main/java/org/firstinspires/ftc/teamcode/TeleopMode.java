@@ -177,6 +177,12 @@ public class TeleopMode extends OpMode
             robot.rightClaw.setPosition(0);
             robot.leftClaw.setPosition(150);
         }
+
+        if (gamepad2.dpad_up){
+            robot.liftMotor.setPower(-1);
+        } else if (gamepad2.dpad_down){
+            robot.liftMotor.setPower(1);
+        }
         
     }
 

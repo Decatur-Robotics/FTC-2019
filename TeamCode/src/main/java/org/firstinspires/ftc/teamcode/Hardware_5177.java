@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         public DcMotor  backDrive   = null;
         public DcMotor  rightDrive  = null;
         public DcMotor  leftDrive = null;
+        public DcMotor liftMotor = null;
 
 
 
@@ -62,14 +63,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
             backDrive = hwMap.dcMotor.get("back_drive");
             leftDrive   = hwMap.dcMotor.get("left_drive");
             rightDrive  = hwMap.dcMotor.get("right_drive");
+            liftMotor  = hwMap.dcMotor.get("lift_motor");
 
             backDrive.setDirection(DcMotor.Direction.FORWARD);
             leftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
             rightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+            liftMotor.setDirection(DcMotor.Direction.FORWARD);
             // Set all motors to zero power
             backDrive.setPower(0);
             leftDrive.setPower(0);
             rightDrive.setPower(0);
+            liftMotor.setPower(0);
             // Set all motors to run without encoders.
             // May want to use RUN_USING_ENCODERS if encoders are installed.
             backDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

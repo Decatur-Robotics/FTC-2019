@@ -32,8 +32,8 @@ public class AutoMode extends OpMode {
     public void delay(double delaySecs){
         for (int i = 0; i < delaySecs*1000; i++){}
     }
-    @Override
 
+    @Override
     public void start () {
         robot.init(hardwareMap);
 
@@ -53,13 +53,22 @@ public class AutoMode extends OpMode {
         //telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
+        foward(-1);
+        while (true) {
+            //robot.rightClaw.setPosition(0);
+            //robot.leftClaw.setPosition(150);
+            if (robot.rightDrive.getCurrentPosition() > 10000) {
+                foward(0);
+                telemetry.addData("encoder position", robot.rightDrive.getCurrentPosition());
+                telemetry.update();
+                //robot.rightClaw.setPosition(170);
+                //robot.leftClaw.setPosition(00);
+                break;
+            }
+        }
     }
     @Override
     public void loop(){
-        foward(-1);
-        if (robot.rightDrive.getCurrentPosition()/120 < -24){
-            foward(0);
-        }
     }
 }
  
