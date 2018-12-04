@@ -1,5 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
+import android.os.Bundle;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Hardware;
@@ -9,9 +16,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import android.provider.MediaStore;
 //TODO: Check this whole thing.
 
-public class AutomodeFunctionality {
+public class AutomodeFunctionality extends Activity{
 
     private ElapsedTime period  = new ElapsedTime();
 
@@ -24,6 +32,8 @@ public class AutomodeFunctionality {
     static final double     TURN_SPEED              = 0.5;
     static final double     WIDTH                   = 18;
     static final double     CIRCUMFERENCE           = (WIDTH * 3.1415);
+
+    private Bitmap imageBitmap;
 
     public AutomodeFunctionality(){
 
@@ -88,5 +98,131 @@ public class AutomodeFunctionality {
         // Turn off RUN_TO_POSITION
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            imageBitmap = (Bitmap) extras.get("data");
+        }
+    }
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    public String pictureAndCheck()
+    {
+        Camera cam = Camera.open();
+        try {
+
+            Parameters p = cam.getParameters();
+            p.setFlashMode(Parameters.FLASH_MODE_TORCH);
+            cam.setParameters(p);
+            cam.startPreview();
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+        dispatchTakePictureIntent();
+        int goldRight = 0;
+        int goldLeft = 0;
+        int goldCenter = 0;
+        int heightOfImage = imageBitmap.getHeight();
+        int widthOfImage = imageBitmap.getWidth();
+        int maxGoldRed = 255;
+        int minGoldRed = 200;
+        int maxGoldGreen = 255;
+        int minGoldGreen = 200;
+        int maxGoldBlue = 142;
+        int minGoldBlue = 88;
+        for (int i = 0; i < widthOfImage / 3; i++)
+        {
+            for (int j = 0; j < heightOfImage; j++)
+            {
+                int pixel = imageBitmap.getPixel(i, j);
+                int redMask = 0x00FF0000;
+                int greenMask = 0x0000FF00;
+                int blueMask = 0x000000FF;
+                int red = (pixel & redMask) >> 8;
+                int green = (pixel & greenMask) >> 4;
+                int blue = (pixel & blueMask);
+                if ((red <= maxGoldRed && red >= minGoldRed) && (green <= maxGoldGreen && green >= minGoldGreen) && (blue <= maxGoldBlue && blue >= minGoldBlue))
+                {
+                    goldLeft += 1;
+                }
+            }
+        }
+        for (int i = widthOfImage / 3; i < 2 * (widthOfImage / 3); i++)
+        {
+            for (int j = 0; j < heightOfImage; j++)
+            {
+                int pixel = imageBitmap.getPixel(i, j);
+                int redMask = 0x00FF0000;
+                int greenMask = 0x0000FF00;
+                int blueMask = 0x000000FF;
+                int red = (pixel & redMask) >> 8;
+                int green = (pixel & greenMask) >> 4;
+                int blue = (pixel & blueMask);
+                if ((red <= maxGoldRed && red >= minGoldRed) && (green <= maxGoldGreen && green >= minGoldGreen) && (blue <= maxGoldBlue && blue >= minGoldBlue))
+                {
+                    goldCenter += 1;
+                }
+            }
+        }
+        for (int i = 2 * (widthOfImage / 3); i < widthOfImage; i++)
+        {
+            for (int j = 0; j < heightOfImage; j++)
+            {
+                int pixel = imageBitmap.getPixel(i, j);
+                int redMask = 0x00FF0000;
+                int greenMask = 0x0000FF00;
+                int blueMask = 0x000000FF;
+                int red = (pixel & redMask) >> 8;
+                int green = (pixel & greenMask) >> 4;
+                int blue = (pixel & blueMask);
+                if ((red <= maxGoldRed && red >= minGoldRed) && (green <= maxGoldGreen && green >= minGoldGreen) && (blue <= maxGoldBlue && blue >= minGoldBlue))
+                {
+                    goldRight += 1;
+                }
+            }
+        }
+        try
+        {
+            cam.stopPreview();
+            cam.release();
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+        if (goldRight > goldLeft)
+        {
+            if (goldRight > goldCenter)
+            {
+                return "right";
+            }
+            else
+            {
+                return "center";
+            }
+        }
+        else
+        {
+            if (goldLeft > goldCenter)
+            {
+                return "left";
+            }
+            else
+            {
+                return "center";
+            }
+        }
     }
 }
