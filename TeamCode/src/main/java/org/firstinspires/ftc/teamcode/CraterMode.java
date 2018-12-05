@@ -14,10 +14,14 @@ public class CraterMode extends OpMode {
     private TeamImu imu;
 
     public void reset(){
-        robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void init(){
@@ -26,9 +30,10 @@ public class CraterMode extends OpMode {
     public void init_loop(){}
 
     public void setPower(double rightPower, double leftPower){
-        //robot.backDrive.setPower(power);
-        robot.rightDrive.setPower(-rightPower);
-        robot.leftDrive.setPower(-leftPower);
+        //robot.backLeft.setPower(power);
+        //robot.backRight.setPower(power);
+        robot.frontRight.setPower(-rightPower);
+        robot.frontLeft.setPower(-leftPower);
     }
 
     public void bothPower(double power){
@@ -44,7 +49,7 @@ public class CraterMode extends OpMode {
             bothPower(-power);
         }
         while (true){
-            if (Math.abs(robot.rightDrive.getCurrentPosition())/*/toInchesConstant*/ > inches && Math.abs(robot.leftDrive.getCurrentPosition())/*/toInchesConstant*/ > inches){
+            if (Math.abs(robot.frontRight.getCurrentPosition())/*/toInchesConstant*/ > inches && Math.abs(robot.frontLeft.getCurrentPosition())/*/toInchesConstant*/ > inches){
                 bothPower(0);
                 break;
             }
@@ -80,8 +85,10 @@ public class CraterMode extends OpMode {
         telemetry.update();
 
         reset();
-        robot.backDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.backDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
         //telemetry.addData("Path0", "Starting at %7d :%7d", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition());
@@ -93,9 +100,9 @@ public class CraterMode extends OpMode {
         while (true) {
             robot.rightClaw.setPosition(0);
             robot.leftClaw.setPosition(150);
-            if (robot.rightDrive.getCurrentPosition() / 120 < -25) {
+            if (robot.frontRight.getCurrentPosition() / 120 < -25) {
                 bothPower(0);
-                telemetry.addData("encoder position", robot.rightDrive.getCurrentPosition());
+                telemetry.addData("encoder position", robot.frontRight.getCurrentPosition());
                 telemetry.update();
                 robot.rightClaw.setPosition(170);
                 robot.leftClaw.setPosition(00);

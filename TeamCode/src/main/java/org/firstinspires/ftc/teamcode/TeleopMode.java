@@ -138,14 +138,17 @@ public class TeleopMode extends OpMode
 
         // Send calculated power to wheels
         if (Math.abs(leftPower) > Math.abs(rightPower)){
-            robot.backDrive.setPower(-leftPower);
+            robot.backRight.setPower(-leftPower);
+            robot.backLeft.setPower(-leftPower);
         }
         else {
-            robot.backDrive.setPower(-rightPower);
+            robot.backLeft.setPower(-rightPower);
+            robot.backRight.setPower(-rightPower);
         }
 
-        robot.leftDrive.setPower(-leftPower);
-        robot.rightDrive.setPower(-rightPower);
+        robot.frontLeft.setPower(-leftPower);
+        robot.frontRight.setPower(-rightPower);
+
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());

@@ -33,9 +33,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
         public Servo rightClaw = null;
         public Servo leftClaw = null;
 
-        public DcMotor  backDrive   = null;
-        public DcMotor  rightDrive  = null;
-        public DcMotor  leftDrive = null;
+        public DcMotor  backLeft   = null;
+        public DcMotor  frontRight  = null;
+        public DcMotor  frontLeft = null;
+        public DcMotor backRight = null;
         public DcMotor liftMotor = null;
 
 
@@ -60,25 +61,29 @@ import com.qualcomm.robotcore.util.ElapsedTime;
             rightClaw = hwMap.servo.get("right_hand");
             leftClaw = hwMap.servo.get("left_hand");
 
-            backDrive = hwMap.dcMotor.get("back_drive");
-            leftDrive   = hwMap.dcMotor.get("left_drive");
-            rightDrive  = hwMap.dcMotor.get("right_drive");
+            backLeft = hwMap.dcMotor.get("back_left");
+            frontLeft   = hwMap.dcMotor.get("front_left");
+            frontRight  = hwMap.dcMotor.get("front_right");
+            backRight = hwMap.dcMotor.get("back_right");
             liftMotor  = hwMap.dcMotor.get("lift_motor");
 
-            backDrive.setDirection(DcMotor.Direction.FORWARD);
-            leftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-            rightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+            backRight.setDirection(DcMotor.Direction.FORWARD);
+            backLeft.setDirection(DcMotor.Direction.FORWARD);
+            frontLeft.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+            frontRight.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
             liftMotor.setDirection(DcMotor.Direction.FORWARD);
             // Set all motors to zero power
-            backDrive.setPower(0);
-            leftDrive.setPower(0);
-            rightDrive.setPower(0);
+            backLeft.setPower(0);
+            backRight.setPower(0);
+            frontLeft.setPower(0);
+            frontRight.setPower(0);
             liftMotor.setPower(0);
             // Set all motors to run without encoders.
             // May want to use RUN_USING_ENCODERS if encoders are installed.
-            backDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             // Define and initialize ALL installed servos.
         }

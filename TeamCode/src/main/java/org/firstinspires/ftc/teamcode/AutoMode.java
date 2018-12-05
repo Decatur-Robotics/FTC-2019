@@ -25,8 +25,10 @@ public class AutoMode extends OpMode {
 
     public void foward(double power){
         //robot.backDrive.setPower(power);
-        robot.rightDrive.setPower(power);
-        robot.leftDrive.setPower(power);
+        robot.frontRight.setPower(power);
+        robot.frontLeft.setPower(power);
+        robot.backRight.setPower(power);
+        robot.backLeft.setPower(power);
     }
 
     public void delay(double delaySecs){
@@ -41,12 +43,22 @@ public class AutoMode extends OpMode {
         telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
 
-        robot.backDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.backDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
         //telemetry.addData("Path0", "Starting at %7d :%7d", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition());
@@ -57,9 +69,9 @@ public class AutoMode extends OpMode {
         while (true) {
             //robot.rightClaw.setPosition(0);
             //robot.leftClaw.setPosition(150);
-            if (robot.rightDrive.getCurrentPosition() > 10000) {
+            if (robot.frontRight.getCurrentPosition() > 10000) {
                 foward(0);
-                telemetry.addData("encoder position", robot.rightDrive.getCurrentPosition());
+                telemetry.addData("encoder position", robot.frontRight.getCurrentPosition());
                 telemetry.update();
                 //robot.rightClaw.setPosition(170);
                 //robot.leftClaw.setPosition(00);
