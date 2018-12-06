@@ -45,7 +45,7 @@ public class AutomodeFunctionality extends Activity{
             return;
         }
         //Turn right if direction is positive, left if negative.
-        robot.gyro.calibrate();
+        //robot.gyro.calibrate();
         double destinationDegree;
         if (degrees <= 0)
         {
@@ -55,7 +55,7 @@ public class AutomodeFunctionality extends Activity{
         {
             destinationDegree = 0 + degrees;
         }
-        while (robot.gyro.getHeading() <= (destinationDegree - 1) || robot.gyro.getHeading() >= (destinationDegree + 1))
+        /*while (robot.gyro.getHeading() <= (destinationDegree - 1) || robot.gyro.getHeading() >= (destinationDegree + 1))
         {
             //TODO: Check the .15 number. Reduce it if the robot never stops turning, increase if the robot takes too long to turn.
             if (destinationDegree <= 180)
@@ -66,7 +66,7 @@ public class AutomodeFunctionality extends Activity{
             {
                 moveInches(0.15, -0.15, .5, 1, robot, true);
             }
-        }
+        }*/
     }
 
     public void moveInches(double rightInches, double leftInches, double speed, int timeoutS, Hardware_4232 robot, boolean rotating) {
@@ -88,18 +88,14 @@ public class AutomodeFunctionality extends Activity{
         //Loop until done or at position
         while ((period.seconds() < timeoutS) && (robot.leftMotor.isBusy() || robot.rightMotor.isBusy()))
         {}
-        // Stop all motion;
-        if (!rotating)
-        {
             robot.leftMotor.setPower(0);
             robot.rightMotor.setPower(0);
-        }
 
         // Turn off RUN_TO_POSITION
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -225,4 +221,5 @@ public class AutomodeFunctionality extends Activity{
             }
         }
     }
+    */
 }

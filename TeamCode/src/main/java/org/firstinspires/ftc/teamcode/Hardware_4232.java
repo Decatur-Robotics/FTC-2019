@@ -49,6 +49,7 @@ public class Hardware_4232
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
+        System.out.println("We made it into init\n");
         // Save reference to Hardware map
         hwMap = ahwMap;
 
@@ -56,7 +57,7 @@ public class Hardware_4232
         leftMotor   = hwMap.dcMotor.get("left_drive");
         rightMotor  = hwMap.dcMotor.get("right_drive");
         rack        = hwMap.dcMotor.get("rack");
-        gyro        = hwMap.get(ModernRoboticsI2cGyro.class, "gyro");
+        //gyro        = hwMap.get(ModernRoboticsI2cGyro.class, "gyro");
         mascot_dropper = hwMap.get(Servo.class, "mascot_dropper");
         // call it something reasonable
         leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors

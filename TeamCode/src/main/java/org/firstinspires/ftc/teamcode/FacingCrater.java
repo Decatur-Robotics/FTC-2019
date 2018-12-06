@@ -16,19 +16,21 @@ public class FacingCrater extends OpMode {
     private boolean dropping = true;
     private boolean drivingToCrater = false;
 
-
-    public void init(){};
-    public void init_loop(){};
+    @Override
+    public void init(){
+        robot.init(hardwareMap);
+        telemetry.addData("line 21", "line21");
+        telemetry.update();
+    }
+    public void init_loop(){}
 
 
 
     @Override
     public void start () {
-        robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
-        telemetry.update();
 
         robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
