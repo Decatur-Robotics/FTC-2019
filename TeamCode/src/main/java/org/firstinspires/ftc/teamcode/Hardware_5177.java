@@ -68,9 +68,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
             liftMotor  = hwMap.dcMotor.get("lift_motor");
 
             backRight.setDirection(DcMotor.Direction.FORWARD);
-            backLeft.setDirection(DcMotor.Direction.FORWARD);
+            backLeft.setDirection(DcMotor.Direction.REVERSE);
             frontLeft.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-            frontRight.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+            frontRight.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
             liftMotor.setDirection(DcMotor.Direction.FORWARD);
             // Set all motors to zero power
             backLeft.setPower(0);
