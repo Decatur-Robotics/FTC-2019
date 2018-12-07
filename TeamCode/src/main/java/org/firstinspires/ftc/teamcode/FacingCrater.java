@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -10,7 +11,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @Autonomous(name="FacingCrater", group="Autonomous")
 
-public class FacingCrater extends OpMode {
+public class FacingCrater extends LinearOpMode {
     Hardware_4232 robot = new Hardware_4232();
     private ElapsedTime runtime = new ElapsedTime();
     private boolean dropping = true;
@@ -20,8 +21,7 @@ public class FacingCrater extends OpMode {
 
     //TODO: Calculate this experimentally
     static final double COUNTS_PER_DEGREE_TURNED = 10;
-    //TODO: Calculate this experimentally too
-    static final double COUNTS_TO_DROP = 3000;
+    static final double COUNTS_TO_DROP = 5600;
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
@@ -68,7 +68,7 @@ public class FacingCrater extends OpMode {
         robot.leftMotor.setPower(Range.clip(speedLeft, 1.0, -1.0));
         robot.rightMotor.setPower(Range.clip(speedRight, 1.0, -1.0));
         //Loop until done or at position
-        while ((period.seconds() < timeoutS) && (robot.leftMotor.isBusy() || robot.rightMotor.isBusy()))
+        while (opModeIsActive() && (period.seconds() < timeoutS) && (robot.leftMotor.isBusy() || robot.rightMotor.isBusy()))
         {}
         robot.leftMotor.setPower(0);
         robot.rightMotor.setPower(0);
@@ -79,77 +79,79 @@ public class FacingCrater extends OpMode {
     }
 
     @Override
-    public void init(){}
-    public void init_loop(){}
+    public void runOpMode() {
+        robot.init(hardwareMap);
+        robot.leftMotor.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        robot.rightMotor.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        while (!(isStarted() || isStopRequested())) {
 
+            // Display the light level while we are waiting to start
+            idle();
+        }
+        int motorTarget = robot.rack.getCurrentPosition() + 5600;
+        robot.rack.setTargetPosition(motorTarget);
+        //Run to position
+        robot.rack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rack.setPower(-1);
+        while (opModeIsActive() && robot.rack.isBusy())
+        {
+            telemetry.addData("Path0","Robot dropping\n");
+            telemetry.update();
+        }
+        //Cut power
+        robot.rack.setPower(0);
+        int leftTarget;
+        int rightTarget;
+        //Calculate Target
+        leftTarget = robot.leftMotor.getCurrentPosition() + 1440;
+        rightTarget = robot.rightMotor.getCurrentPosition() + 1440;
+        //Set targets to motors
+        robot.leftMotor.setTargetPosition(leftTarget);
+        robot.rightMotor.setTargetPosition(rightTarget);
+        //Set motors to run to position
+        robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //Reset time and run motion
+        robot.leftMotor.setPower(Range.clip(-.7, 1.0, -1.0));
+        robot.rightMotor.setPower(Range.clip(-.7, 1.0, -1.0));
+        //Loop until done or at position
+        while (opModeIsActive() && (robot.leftMotor.isBusy() || robot.rightMotor.isBusy())) {
+        }
+        robot.leftMotor.setPower(0);
+        robot.rightMotor.setPower(0);
 
-
-    @Override
-    public void start () {
-
-        // Send telemetry message to signify robot waiting;
-        telemetry.addData("Status", "Resetting Encoders");    //
-
-        robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        // Turn off RUN_TO_POSITION
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Path0", "Starting at %7d :%7d", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition());
-        telemetry.update();
-
-        // Wait for the game to start (driver presses PLAY)
-    }
-    @Override
-    public void loop(){
-        //Code to drop
-        if (dropping)
+        //robot could be facing to the side depending on where we put the rack - Scott
+        //Well it isn't so ha - Keon
+        moveInches(1, 1, .7, .7, 7);
+        rotateDegrees(-45, .5);
+        moveInches(40, 40, .7, .7, 15);
+        /*motorTarget = robot.rack.getCurrentPosition() + (int)COUNTS_TO_DROP;
+        robot.rack.setTargetPosition(motorTarget);
+        robot.rack.setPower(1);
+        while (opModeIsActive() && robot.rack.isBusy())
         {
-            //Set motor target
-            int motorTarget = robot.rack.getCurrentPosition() + (int)COUNTS_TO_DROP;
-            robot.rack.setTargetPosition(motorTarget);
-            //Run to position
-            robot.rack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.rack.setPower(-1);
-            while (robot.rack.isBusy())
-            {
-                telemetry.addData("Path0","Robot dropping\n");
-                telemetry.update();
-            }
-            //Cut power
-            robot.rack.setPower(0);
-            //robot could be facing to the side depending on where we put the rack - Scott
-            //Well it isn't so ha - Keon
-            rotateDegrees(5, .2);
-            moveInches(-4, -4, .7, .5, 7);
-            dropping = false;
-            drivingToCrater = true;
-            motorTarget = robot.rack.getCurrentPosition() + (int)COUNTS_TO_DROP;
-            robot.rack.setTargetPosition(motorTarget);
-            robot.rack.setPower(1);
-            while (robot.rack.isBusy())
-            {
-                telemetry.addData("Path0","Rack dropping\n");
-                telemetry.update();
-            }
-            //Cut power
-            robot.rack.setPower(0);
+            telemetry.addData("Path0","Rack dropping\n");
+            telemetry.update();
         }
-        if (drivingToCrater)
-        {
-            //TODO: Comment this line and uncomment lower parts to try dropping mascot
-            rotateDegrees(-95, .5);
-            moveInches(85, 85, 0.8, 0.8, 15);
-            //rotateDegrees(-95, .5);
-            //moveInches(24, 24, .8, .8, 15);
-            //rotateDegrees(107.693, .7);
-            //moveInches(110, 110, -.8, -.8, 15);
-            //robot.mascot_dropper.setPosition(1);
-            //rotateDegrees(-62.69, .7);
-            //moveInches(108, 108, .8, .8, 15);
-            drivingToCrater = false;
-        }
+        //Cut power
+        robot.rack.setPower(0);
+
+        //TODO: Comment this line and uncomment lower parts to try dropping mascot
+        rotateDegrees(-95, .5);
+        moveInches(85, 85, 0.8, 0.8, 15);
+        //rotateDegrees(-95, .5);
+        //moveInches(24, 24, .8, .8, 15);
+        //rotateDegrees(107.693, .7);
+        //moveInches(110, 110, -.8, -.8, 15);
+        //robot.mascot_dropper.setPosition(1);
+        //rotateDegrees(-62.69, .7);
+        //moveInches(108, 108, .8, .8, 15);
+        drivingToCrater = false;*/
     }
+
+
+
 }

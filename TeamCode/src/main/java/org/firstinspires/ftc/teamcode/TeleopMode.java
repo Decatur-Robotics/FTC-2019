@@ -124,9 +124,13 @@ public class TeleopMode extends OpMode
         {
             robot.rack.setPower(1);
         }
+        if (gamepad1.x)
+        {
+            telemetry.addData("servo is ", "%7d", robot.mascot_dropper.getPosition());
+        }
         if (gamepad1.y)
         {
-            telemetry.addData("Revs are ", "Left motor: %ld, Right motor: %ld, Rack: %ld", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition(), robot.rack.getCurrentPosition());
+            telemetry.addData("Revs are ", "Left motor: %7d, Right motor: %7d, Rack: %7d", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition(), robot.rack.getCurrentPosition());
             telemetry.update();
         }
         else
