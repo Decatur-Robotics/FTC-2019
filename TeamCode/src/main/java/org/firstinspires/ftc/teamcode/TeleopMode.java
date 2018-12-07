@@ -124,6 +124,11 @@ public class TeleopMode extends OpMode
         {
             robot.rack.setPower(1);
         }
+        if (gamepad1.y)
+        {
+            telemetry.addData("Revs are ", "Left motor: %ld, Right motor: %ld, Rack: %ld", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition(), robot.rack.getCurrentPosition());
+            telemetry.update();
+        }
         else
         {
             robot.rack.setPower(0);

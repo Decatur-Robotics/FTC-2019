@@ -35,7 +35,7 @@ public class Hardware_4232
     public DcMotor  rack = null;
     public ModernRoboticsI2cGyro gyro = null;
     public Servo mascot_dropper = null;
-  //  public ModernRoboticsI2cGyro gyro = null;
+    //public ModernRoboticsI2cGyro gyro = null;
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();

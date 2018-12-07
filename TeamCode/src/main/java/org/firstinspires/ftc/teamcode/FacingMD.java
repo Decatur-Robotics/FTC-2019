@@ -21,6 +21,10 @@ public class FacingMD extends OpMode {
 
     private ElapsedTime period  = new ElapsedTime();
 
+    //TODO: Set this experimentally
+    static final double COUNTS_TO_DROP = 3000;
+    //TODO: Set this experimentally
+    static final double COUNTS_PER_DEGREE_TURNED = 10;
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
@@ -31,7 +35,26 @@ public class FacingMD extends OpMode {
     static final double     WIDTH                   = 18;
     static final double     CIRCUMFERENCE           = (WIDTH * 3.1415);
 
-    public void moveInches(double rightInches, double leftInches, double speed, int timeoutS, Hardware_4232 robot, boolean rotating) {
+    public void rotateDegrees(double degrees, double speed)
+    {
+        double leftDistance = (degrees * COUNTS_PER_DEGREE_TURNED) / COUNTS_PER_INCH;
+        double rightDistance = (degrees * COUNTS_PER_DEGREE_TURNED) / COUNTS_PER_INCH;
+        double leftSpeed;
+        double rightSpeed;
+        if (degrees < 0)
+        {
+            leftSpeed = -speed;
+            rightSpeed = speed;
+        }
+        else
+        {
+            leftSpeed = speed;
+            rightSpeed = -speed;
+        }
+        moveInches(rightDistance, leftDistance, rightSpeed, leftSpeed, 10);
+    }
+
+    public void moveInches(double rightInches, double leftInches, double speedRight, double speedLeft, int timeoutS) {
         int leftTarget;
         int rightTarget;
         //Calculate Target
@@ -45,8 +68,8 @@ public class FacingMD extends OpMode {
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         //Reset time and run motion
         period.reset();
-        robot.leftMotor.setPower(Range.clip(speed, 1.0, -1.0));
-        robot.rightMotor.setPower(Range.clip(speed, 1.0, -1.0));
+        robot.leftMotor.setPower(Range.clip(speedLeft, 1.0, -1.0));
+        robot.rightMotor.setPower(Range.clip(speedRight, 1.0, -1.0));
         //Loop until done or at position
         while ((period.seconds() < timeoutS) && (robot.leftMotor.isBusy() || robot.rightMotor.isBusy()))
         {}
@@ -59,11 +82,7 @@ public class FacingMD extends OpMode {
     }
 
     @Override
-    public void init(){
-        robot.init(hardwareMap);
-        telemetry.addData("line 21", "line21");
-        telemetry.update();
-    }
+    public void init(){}
     public void init_loop(){}
 
 
@@ -93,7 +112,7 @@ public class FacingMD extends OpMode {
         {
             //TODO: Change the hardcoded number until you land and the hook is free, Also change the + sign to a - if it doesn't work or breaks.
             //Set motor target
-            int motorTarget = robot.rack.getCurrentPosition() + 3250;
+            int motorTarget = robot.rack.getCurrentPosition() + (int)COUNTS_TO_DROP;
             robot.rack.setTargetPosition(motorTarget);
             //Run to position
             robot.rack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -105,11 +124,12 @@ public class FacingMD extends OpMode {
             }
             //Cut power
             robot.rack.setPower(0);
-            moveInches(-4, -4, .7, 5, robot, false);
-            //automode.rotateDegrees(90, robot);
+            rotateDegrees(5, .2);
+            moveInches(-4, -4, .7, .7, 5);
+            rotateDegrees(85, .7);
             dropping = false;
             drivingToCrater = true;
-            motorTarget = robot.rack.getCurrentPosition() + 3500;
+            motorTarget = robot.rack.getCurrentPosition() + (int)COUNTS_TO_DROP;
             robot.rack.setTargetPosition(motorTarget);
             robot.rack.setPower(1);
             while (robot.rack.isBusy())
@@ -122,11 +142,11 @@ public class FacingMD extends OpMode {
         }
         if (drivingToCrater)
         {
-            moveInches(-82, -82, .7, 15, robot, false);
+            moveInches(84, 84, -.7, -.7, 15);
+            robot.mascot_dropper.setPosition(1);
             //TODO: Add Mascot dropping code here
-            robot.mascot_dropper.setPosition(180);
-           // automode.rotateDegrees(-50, robot);
-            moveInches(132, 132, .8, 15, robot, false);
+            rotateDegrees(-45, .7);
+            moveInches(126, 126, .8, .8, 15);
             drivingToCrater = false;
         }
     }
