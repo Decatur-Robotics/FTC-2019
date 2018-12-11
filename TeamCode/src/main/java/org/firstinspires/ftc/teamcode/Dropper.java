@@ -20,7 +20,7 @@ public class Dropper extends LinearOpMode {
             // Display the light level while we are waiting to start
             idle();
         }
-        int motorTarget = robot.rack.getCurrentPosition() + 5600;
+        int motorTarget = robot.rack.getCurrentPosition() + 10272;
         robot.rack.setTargetPosition(motorTarget);
         //Run to position
         robot.rack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -55,6 +55,8 @@ public class Dropper extends LinearOpMode {
         // Turn off RUN_TO_POSITION
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
     }
 
 }

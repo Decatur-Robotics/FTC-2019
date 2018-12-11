@@ -2,21 +2,15 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-//TODO: Test this entire opmode, it likely won't work great.
+@Autonomous(name="TurnTest", group="Autonomous")
+public class DemoTurnTest extends LinearOpMode {
 
-@Autonomous(name="FacingCrater", group="Autonomous")
 
-public class FacingCrater extends LinearOpMode {
-    Hardware_4232 robot = new Hardware_4232();
-    private ElapsedTime runtime = new ElapsedTime();
-    private boolean dropping = true;
-    private boolean drivingToCrater = false;
-
+    Hardware_Demo robot = new Hardware_Demo();
     private ElapsedTime period  = new ElapsedTime();
 
     //TODO: Calculate this experimentally
@@ -102,85 +96,17 @@ public class FacingCrater extends LinearOpMode {
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
+        robot.leftMotor.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        robot.rightMotor.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         while (!(isStarted() || isStopRequested())) {
 
             // Display the light level while we are waiting to start
             idle();
         }
-        int motorTarget = robot.rack.getCurrentPosition() + 10272;
-        robot.rack.setTargetPosition(motorTarget);
-        //Run to position
-        robot.rack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rack.setPower(-1);
-        while (opModeIsActive() && robot.rack.isBusy())
-        {
-            telemetry.addData("Path0","Robot dropping\n");
-            telemetry.update();
-        }
-        //Cut power
-        robot.rack.setPower(0);
-        int leftTarget;
-        int rightTarget;
-        //Calculate Target
-        leftTarget = robot.leftMotor.getCurrentPosition() - 1440;
-        rightTarget = robot.rightMotor.getCurrentPosition() - 1440;
-        //Set targets to motors
-        robot.leftMotor.setTargetPosition(leftTarget);
-        robot.rightMotor.setTargetPosition(rightTarget);
-        //Set motors to run to position
-        robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //Reset time and run motion
-        robot.leftMotor.setPower(Range.clip(-.7, 1.0, -1.0));
-        robot.rightMotor.setPower(Range.clip(-.7, 1.0, -1.0));
-        //Loop until done or at position
-        while (opModeIsActive() && (robot.leftMotor.isBusy() || robot.rightMotor.isBusy())) {
-        }
-        robot.leftMotor.setPower(0);
-        robot.rightMotor.setPower(0);
-
-        // Turn off RUN_TO_POSITION
-        robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //robot could be facing to the side depending on where we put the rack - Scott
-        //Well it isn't so ha - Keon
-        moveInches(1, 1, .7, .7, 7);
-        rotateDegrees(-45, .5);
-        moveInches(24, 24, .7, .7, 15);
-        rotateDegrees(-109.5, .5);
-        moveInches(102, 102, .7, .7, 15);
-        robot.mascot_dropper.setPosition(0.5);
-        moveInches(6, 6, -0.7, -0.7, 5);
-        rotateDegrees(160, .7);
-        moveInches(132, 132, 1, 1, 15);
-        /*motorTarget = robot.rack.getCurrentPosition() + (int)COUNTS_TO_DROP;
-        robot.rack.setTargetPosition(motorTarget);
-        robot.rack.setPower(1);
-        while (opModeIsActive() && robot.rack.isBusy())
-        {
-            telemetry.addData("Path0","Rack dropping\n");
-            telemetry.update();
-        }
-        //Cut power
-        robot.rack.setPower(0);
-
-        //TODO: Comment this line and uncomment lower parts to try dropping mascot
-        rotateDegrees(-95, .5);
-        moveInches(85, 85, 0.8, 0.8, 15);
-        //rotateDegrees(-95, .5);
-        //moveInches(24, 24, .8, .8, 15);
-        //rotateDegrees(107.693, .7);
-        //moveInches(110, 110, -.8, -.8, 15);
-        //robot.mascot_dropper.setPosition(1);
-        //rotateDegrees(-62.69, .7);
-        //moveInches(108, 108, .8, .8, 15);
-        drivingToCrater = false;*/
+        rotateDegrees(45, .7);
+        moveInches(6, 6, .7, .7, 15);
     }
-
-
-
 }
