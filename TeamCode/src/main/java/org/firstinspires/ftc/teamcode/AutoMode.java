@@ -49,14 +49,26 @@ public class AutoMode extends OpMode {
         }
 
         if (straight){
-            setPower(2, power);
         } else if (right){
                 setPower(1, power);
                 setPower(0, -power);
             } else {
                 setPower(1, -power);
                 setPower(0, power);
+        }
+
+        while (true){
+            if (right){
+                if(imu.getTotalDegreesTurned() < destination){
+                    setPower(2, 0);
+                }
+                else {
+                    if(imu.getTotalDegreesTurned() > destination){
+                        setPower(2, 0);
+                    }
+                }
             }
+        }
     }
 
     public void delay(double delaySecs){
@@ -93,12 +105,12 @@ public class AutoMode extends OpMode {
         //telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
-        foward(-1);
+        setPower(2,-1);
         while (true) {
             //robot.rightClaw.setPosition(0);
             //robot.leftClaw.setPosition(150);
             if (robot.frontRight.getCurrentPosition() > 10000) {
-                foward(0);
+                setPower(2,0);
                 telemetry.addData("encoder position", robot.frontRight.getCurrentPosition());
                 telemetry.update();
                 //robot.rightClaw.setPosition(170);
