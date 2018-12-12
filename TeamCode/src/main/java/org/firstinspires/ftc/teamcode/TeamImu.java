@@ -28,23 +28,27 @@ public class TeamImu  {
     BNO055IMU.Parameters parameters;
     Acceleration accelrationDrift;
 
+    double totalDegress = 0;
+    double lastHeading = 0;
+
 
     public TeamImu initialize(HardwareMap hardwareMap, Telemetry telemetry) {
         this.parameters = parameters;
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
+
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.angleUnit            = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit            = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile  = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled       = true;
+        parameters.loggingTag           = "IMU";
 
 
         imu.initialize(parameters);
@@ -59,6 +63,22 @@ public class TeamImu  {
     /**
      * Adjust for phantom acceleration
      */
+
+    public void loop(){
+        double currentheading = getHeading();
+        double degreesTurned = currentheading - lastHeading;
+        lastHeading = currentheading;
+
+        //Wrap around fixing
+        if (degreesTurned > 180){
+            degreesTurned -= 360;
+        } else if (degreesTurned < -180){
+            degreesTurned +=360;
+        }
+
+        totalDegress += degreesTurned;
+    }
+
     public void calibrateWhileRobotIsNotMoving() {
         Acceleration totalAccelerationsMeasured = null;
         for (int i = 0; i < 10; i++) {
@@ -76,6 +96,14 @@ public class TeamImu  {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            accelrationDrift = new Acceleration(
+                    totalAccelerationsMeasured.unit,
+                    totalAccelerationsMeasured.xAccel / 10,
+                    totalAccelerationsMeasured.yAccel / 10,
+                    totalAccelerationsMeasured.zAccel / 10,
+                    totalAccelerationsMeasured.acquisitionTime);
+
         }
 
         accelrationDrift = new Acceleration(
@@ -164,6 +192,11 @@ public class TeamImu  {
 
     String formatDegrees(double degrees) {
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
+    }
+
+    public double getTotalDegreesTurned()
+    {
+        return totalDegress;
     }
 
 }

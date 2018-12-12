@@ -5,6 +5,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 //TODO: Test this entire opmode, it likely won't work great.
@@ -23,12 +24,39 @@ public class AutoMode extends OpMode {
     public void init_loop(){}
 
 
-    public void foward(double power){
-        //robot.backDrive.setPower(power);
-        robot.frontRight.setPower(power);
-        robot.frontLeft.setPower(power);
-        robot.backRight.setPower(power);
-        robot.backLeft.setPower(power);
+    public void setPower(int motorSide, double power){
+        if (motorSide == 1) {
+            robot.frontRight.setPower(power);
+            robot.backRight.setPower(power);
+        } else if (motorSide == 0){
+            robot.frontLeft.setPower(power);
+            robot.backLeft.setPower(power);
+        } else if (motorSide == 2){
+            setPower(1, power);
+            setPower(0, power);
+        }
+    }
+
+    public void turn(double degrees, double power){
+        double destination = imu.getTotalDegreesTurned() + degrees;
+        boolean straight = false;
+        boolean right = false;
+        if (imu.getTotalDegreesTurned() == destination){
+            straight = true;
+        }
+        else {
+            right = imu.getTotalDegreesTurned() > destination;
+        }
+
+        if (straight){
+            setPower(2, power);
+        } else if (right){
+                setPower(1, power);
+                setPower(0, -power);
+            } else {
+                setPower(1, -power);
+                setPower(0, power);
+            }
     }
 
     public void delay(double delaySecs){
