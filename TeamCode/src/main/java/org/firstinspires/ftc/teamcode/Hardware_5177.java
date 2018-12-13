@@ -65,7 +65,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
             frontLeft   = hwMap.dcMotor.get("front_left");
             frontRight  = hwMap.dcMotor.get("front_right");
             backRight = hwMap.dcMotor.get("back_right");
-            liftMotor  = hwMap.dcMotor.get("lift_motor");
+            liftMotor  = hwMap.dcMotor.get("right_arm");
+
 
             backRight.setDirection(DcMotor.Direction.FORWARD);
             backLeft.setDirection(DcMotor.Direction.REVERSE);

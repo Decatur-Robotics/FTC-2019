@@ -147,9 +147,8 @@ public class AutoMode extends OpMode {
         // Wait for the game to start (driver presses PLAY)
         setPower(2,-1);
         while (true) {
-            //robot.rightClaw.setPosition(0);
-            //robot.leftClaw.setPosition(150);
-            if (robot.frontRight.getCurrentPosition() > 10000) {
+
+            if (robot.frontRight.getCurrentPosition() >= 10000) {
                 setPower(2,0);
                 telemetry.addData("encoder position", robot.frontRight.getCurrentPosition());
                 telemetry.update();
