@@ -12,7 +12,7 @@ public class crater extends LinearOpMode {
 
     private ElapsedTime period = new ElapsedTime();
 
-    static final double COUNTS_TO_DROP = 5600;
+    static final double COUNTS_TO_DROP = 8532;
     //TODO: Set this experimentally
     static final double COUNTS_PER_DEGREE_TURNED = 14;
     static final double COUNTS_PER_MOTOR_REV = 1440;    // eg: TETRIX Motor Encoder

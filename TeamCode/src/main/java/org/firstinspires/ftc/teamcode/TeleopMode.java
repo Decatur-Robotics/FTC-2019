@@ -116,6 +116,11 @@ public class TeleopMode extends OpMode
         leftPower  = -gamepad1.left_stick_y ;
         rightPower = -gamepad1.right_stick_y ;
 
+        if (gamepad2.y)
+        {
+            telemetry.addData("Motors are", "Left: %7d Right: %7d Rack: %7d", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition(), robot.rack.getCurrentPosition());
+            telemetry.update();
+        }
         if (gamepad2.dpad_down)
         {
             robot.rack.setPower(-1);
