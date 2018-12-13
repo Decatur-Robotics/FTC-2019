@@ -5,7 +5,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 //TODO: Test this entire opmode, it likely won't work great.
@@ -16,6 +15,10 @@ public class AutoMode extends OpMode {
     Hardware_5177 robot = new Hardware_5177();
     private ElapsedTime runtime = new ElapsedTime();
     private TeamImu imu;
+    public int destination = 0;
+
+    //TODO: Get measurement data. NOT ACTUAL RATIO! NEED TEST DATA!
+    public int ticksPerInch = 1;
 
 
     public void init(){
@@ -38,7 +41,7 @@ public class AutoMode extends OpMode {
     }
 
     public void turn(double degrees, double power){
-        double destination = imu.getTotalDegreesTurned() + degrees;
+        destination += degrees;
         boolean straight = false;
         boolean right = false;
         if (imu.getTotalDegreesTurned() == destination){
@@ -61,12 +64,49 @@ public class AutoMode extends OpMode {
             if (right){
                 if(imu.getTotalDegreesTurned() < destination){
                     setPower(2, 0);
+                    break;
                 }
                 else {
                     if(imu.getTotalDegreesTurned() > destination){
                         setPower(2, 0);
+                        break;
                     }
                 }
+            }
+        }
+    }
+
+    public void goStraight(double inches, double speed){
+        boolean right;
+        double degOff;
+        double adj = 0;
+        double ticksMoved;
+        double ticksMovedTurn = 0;
+        while (true){
+            degOff = (destination - imu.getTotalDegreesTurned());
+            right = degOff > 0;
+            setPower(2,speed);
+            if (Math.abs(degOff) < 10){
+                adj = Math.abs(degOff / 10);
+            }
+            if(right && Math.abs(degOff) < 10){
+                setPower(1, -(speed + adj));
+            } else if (Math.abs(degOff) < 10){
+                setPower(0, -(speed + adj));
+            }
+
+            if (Math.abs(degOff) >= 10){
+                ticksMoved = robot.backLeft.getCurrentPosition();
+                turn(0, .25);
+                ticksMovedTurn += ticksMoved - robot.backLeft.getCurrentPosition();
+            }
+
+            ticksMoved = robot.backLeft.getCurrentPosition() - ticksMovedTurn;
+
+            setPower(2, speed);
+            if (robot.backLeft.getCurrentPosition() * ticksPerInch >= inches){
+                setPower(2, 0);
+                break;
             }
         }
     }
