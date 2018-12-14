@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 @Autonomous(name="ColorTest", group="Autonomous")
 public class ColorTest extends OpMode {
     private Camera camera;
-    private CameraController cameraController;
+    private CameraController cameraController = new CameraController();
     private Bitmap image;
 
     @Override
@@ -30,7 +30,15 @@ public class ColorTest extends OpMode {
             image = cameraController.convertYuvImageToBitmap(cameraController.yuvImage);
             if (image != null)
             {
-                telemetry.addData("Side is ", "%s", whichSide(image));
+                String test = whichSide(image);
+                if (test != "right" && test != "center" && test != "left") {
+                    telemetry.addData("Side is ", "%s", test);
+                    telemetry.update();
+                }
+                else {
+                    telemetry.addData("Side is ", "nada");
+                    telemetry.update();
+                }
             }
         }
     }

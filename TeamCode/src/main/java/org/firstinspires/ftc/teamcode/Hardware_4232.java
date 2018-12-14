@@ -62,7 +62,7 @@ public class Hardware_4232
         // call it something reasonable
         leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        rack.setDirection(DcMotor.Direction.REVERSE);
+        rack.setDirection(DcMotor.Direction.FORWARD);
         // Set all motors to zero power
         leftMotor.setPower(0);
         rightMotor.setPower(0);
