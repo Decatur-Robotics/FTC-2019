@@ -73,6 +73,7 @@ public class AutoMode extends OpMode {
                     }
                 }
             }
+            imu.loop();
         }
     }
 
@@ -80,7 +81,7 @@ public class AutoMode extends OpMode {
         boolean right;
         double degOff;
         double adj = 0;
-        double ticksMoved;
+        double ticksMoved = 0;
         double ticksMovedTurn = 0;
         while (true){
             degOff = (destination - imu.getTotalDegreesTurned());
@@ -96,18 +97,21 @@ public class AutoMode extends OpMode {
             }
 
             if (Math.abs(degOff) >= 10){
-                ticksMoved = robot.backLeft.getCurrentPosition();
+                if (ticksMoved == 0) {
+                    ticksMoved = robot.backLeft.getCurrentPosition();
+                }
                 turn(0, .25);
-                ticksMovedTurn += ticksMoved - robot.backLeft.getCurrentPosition();
+                ticksMovedTurn += robot.backLeft.getCurrentPosition() - ticksMoved;
             }
 
             ticksMoved = robot.backLeft.getCurrentPosition() - ticksMovedTurn;
 
             setPower(2, speed);
-            if (robot.backLeft.getCurrentPosition() * ticksPerInch >= inches){
+            if (ticksMoved * ticksPerInch >= inches){
                 setPower(2, 0);
                 break;
             }
+            imu.loop();
         }
     }
 
@@ -123,6 +127,8 @@ public class AutoMode extends OpMode {
         telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
 
+
+        /*
         robot.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -131,6 +137,7 @@ public class AutoMode extends OpMode {
         robot.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        */
         robot.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -152,8 +159,6 @@ public class AutoMode extends OpMode {
                 setPower(2,0);
                 telemetry.addData("encoder position", robot.frontRight.getCurrentPosition());
                 telemetry.update();
-                //robot.rightClaw.setPosition(170);
-                //robot.leftClaw.setPosition(00);
                 break;
             }
         }

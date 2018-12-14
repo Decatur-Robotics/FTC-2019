@@ -179,12 +179,16 @@ public class TeleopMode extends OpMode
         } else if (gamepad2.dpad_down){
             robot.liftMotor.setPower(1);
         }
+        else {
+            robot.liftMotor.setPower(0);
+        }
         
     }
 
     /*
      * Code to run ONCE after the driver hits STOP
      */
+
     @Override
     public void stop() {
     }
