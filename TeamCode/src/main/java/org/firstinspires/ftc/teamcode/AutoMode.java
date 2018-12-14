@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -11,7 +12,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="FacingCrate", group="Autonomous")
 
-public class AutoMode extends OpMode {
+public class AutoMode extends LinearOpMode {
+
+    //Initialize robot and imu measurement thing
     Hardware_5177 robot = new Hardware_5177();
     private ElapsedTime runtime = new ElapsedTime();
     private TeamImu imu;
@@ -19,12 +22,6 @@ public class AutoMode extends OpMode {
 
     //TODO: Get measurement data. NOT ACTUAL RATIO! NEED TEST DATA!
     public int ticksPerInch = 1;
-
-
-    public void init(){
-        imu = new TeamImu().initialize(hardwareMap, telemetry);
-    }
-    public void init_loop(){}
 
 
     public void setPower(int motorSide, double power){
@@ -60,14 +57,14 @@ public class AutoMode extends OpMode {
                 setPower(0, power);
         }
 
-        while (true){
+        while (opModeIsActive()){
             if (right){
-                if(imu.getTotalDegreesTurned() < destination){
+                if(imu.getTotalDegreesTurned() <= destination){
                     setPower(2, 0);
                     break;
                 }
                 else {
-                    if(imu.getTotalDegreesTurned() > destination){
+                    if(imu.getTotalDegreesTurned() >= destination){
                         setPower(2, 0);
                         break;
                     }
@@ -83,7 +80,7 @@ public class AutoMode extends OpMode {
         double adj = 0;
         double ticksMoved = 0;
         double ticksMovedTurn = 0;
-        while (true){
+        while (opModeIsActive()){
             degOff = (destination - imu.getTotalDegreesTurned());
             right = degOff > 0;
             setPower(2,speed);
@@ -119,8 +116,10 @@ public class AutoMode extends OpMode {
         for (int i = 0; i < delaySecs*1000; i++){}
     }
 
+
     @Override
-    public void start () {
+    public void runOpMode() {
+        imu = new TeamImu().initialize(hardwareMap, telemetry);
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
@@ -153,7 +152,7 @@ public class AutoMode extends OpMode {
 
         // Wait for the game to start (driver presses PLAY)
         setPower(2,-1);
-        while (true) {
+        while (opModeIsActive()) {
 
             if (robot.frontRight.getCurrentPosition() >= 10000) {
                 setPower(2,0);
@@ -162,9 +161,6 @@ public class AutoMode extends OpMode {
                 break;
             }
         }
-    }
-    @Override
-    public void loop(){
     }
 }
  
