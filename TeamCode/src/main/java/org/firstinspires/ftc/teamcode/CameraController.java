@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
@@ -21,7 +22,7 @@ import java.nio.ByteBuffer;
  * <p/>
  * Enables control of the robot via the gamepad
  */
-public class CameraController  {
+public class CameraController extends Application{
     public Camera camera;
     public CameraPreview preview;
 
@@ -101,9 +102,9 @@ public class CameraController  {
         return cam;
     }
 
-    public void startCamera() {
+    public Camera startCamera() {
 
-        camera = openCamera(Camera.CameraInfo.CAMERA_FACING_FRONT);
+        camera = openCamera(Camera.CameraInfo.CAMERA_FACING_BACK);
         camera.setPreviewCallback(previewCallback);
 
         Camera.Parameters parameters = camera.getParameters();
@@ -112,13 +113,14 @@ public class CameraController  {
         parameters.setPreviewSize(width, height);
 
         camera.setParameters(parameters);
+        //preview = new CameraPreview(getApplicationContext(), camera, previewCallback);
 
         data = parameters.flatten();
 /*
         if(preview == null) {
             ((FtcRobotControllerActivity) hardwareMap.appContext).initPreviewLinear(camera, this, previewCallback);
         }
-*/
+*/      return camera;
     }
 
     public void stopCameraInSecs(int duration) {

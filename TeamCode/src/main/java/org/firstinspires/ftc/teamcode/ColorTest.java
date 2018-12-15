@@ -15,9 +15,18 @@ public class ColorTest extends OpMode {
 
     @Override
     public void init () {
-        cameraController.startCamera();
-        camera = cameraController.getCamera();
+        camera = cameraController.startCamera();
         telemetry.setAutoClear(false);
+        if (camera == null)
+        {
+            telemetry.addData("NO Cam Found", "");
+            telemetry.update();
+        }
+        else
+        {
+            telemetry.addData("Cam has been found", "");
+            telemetry.update();
+        }
     }
     @Override
     public void start () {
@@ -25,7 +34,7 @@ public class ColorTest extends OpMode {
     }
     @Override
     public void loop () {
-        if (cameraController.isImageReady())
+        if (cameraController.yuvImage != null)
         {
             image = cameraController.convertYuvImageToBitmap(cameraController.yuvImage);
             if (image != null)
@@ -39,6 +48,20 @@ public class ColorTest extends OpMode {
                     telemetry.addData("Side is ", "nada");
                     telemetry.update();
                 }
+            }
+            else
+            {
+                telemetry.addData("no image", "oof");
+                telemetry.update();
+            }
+        }
+        else
+        {
+            telemetry.addData("image not good", "oof");
+            telemetry.update();
+            if (cameraController.yuvImage != null)
+            {
+                telemetry.addData("Image good tho", "");
             }
         }
     }

@@ -207,17 +207,18 @@ public class FacingMD extends LinearOpMode {
                 // Display the light level while we are waiting to start
                 idle();
             }
-            int motorTarget = robot.rack.getCurrentPosition() + 10272;
+            int motorTarget = robot.rack.getCurrentPosition() - 400;
             robot.rack.setTargetPosition(motorTarget);
             //Run to position
             robot.rack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.rack.setPower(-1);
-            while (opModeIsActive() && robot.rack.isBusy()) {
+            while (opModeIsActive() && robot.rack.getCurrentPosition() < robot.rack.getTargetPosition()) {
                 telemetry.addData("Path0", "Robot dropping\n");
                 telemetry.update();
             }
             //Cut power
             robot.rack.setPower(0);
+            robot.rack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             int leftTarget;
             int rightTarget;
             //Calculate Target
